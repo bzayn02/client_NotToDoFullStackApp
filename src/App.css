@@ -1,0 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  text-align: center;
+}
+
+body {
+  margin: 0;
+}
+
+.wrapper {
+  background-color: #205d5e;
+}
