@@ -42,6 +42,10 @@ const TaskLists = () => {
       setIds([]);
     }
   };
+
+  const total = taskList.reduce((totalHour, { hour }) => {
+    return totalHour + hour;
+  }, 0);
   return (
     <div>
       <Row className="mt-4">
@@ -91,7 +95,7 @@ const TaskLists = () => {
         <Col md="6">
           <h3>Bad List</h3>
           <hr />
-          <Table className="table table-striped table-hover ">
+          <Table className="table table-striped table-hover">
             <thead>
               <tr>
                 <th>S.N.</th>
@@ -129,7 +133,7 @@ const TaskLists = () => {
             ))}
           </Table>
           <hr />
-          <Table className="table table-striped table-hover ">
+          <Table className="table table-striped table-hover  d-flex w-full justify-content-center">
             <tbody>
               <tr>
                 <td>Total hours you could have saved:</td>
@@ -149,12 +153,8 @@ const TaskLists = () => {
           <tbody>
             {' '}
             <tr>
-              <td>Total hours allocated:</td>
-              <td>
-                {taskList.reduce((totalHour, item) => {
-                  return totalHour + item.hour;
-                }, 0)}
-              </td>
+              <td>Total hours allocated in a week:</td>
+              <td>{total}hrs/168hrs</td>
             </tr>
           </tbody>
         </Table>
