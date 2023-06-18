@@ -1,10 +1,16 @@
-import React, { useEffect } from 'react';
-import { Button, Col, Row, Table } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTaskLists, updateTask } from '../redux/taskAction';
+import {
+  deleteTaskAction,
+  getTaskLists,
+  updateTask,
+} from '../redux/taskAction';
 
 const TaskLists = () => {
   const dispatch = useDispatch();
+
+  const [ids, setIds] = useState([]);
 
   const { taskList } = useSelector((state) => state.tasks);
 
@@ -22,6 +28,20 @@ const TaskLists = () => {
   const entryList = taskList.filter(({ type }) => type === 'entry');
   const badList = taskList.filter(({ type }) => type === 'bad');
 
+  const handleOnSelect = (e) => {
+    const { value, checked } = e.target;
+    checked
+      ? setIds([...ids, value])
+      : setIds(ids.filter((id) => id !== value));
+  };
+  console.log(ids);
+
+  const handleOnDelete = () => {
+    if (window.confirm('Are you sure you want to delete the tasks?')) {
+      dispatch(deleteTaskAction(ids));
+      setIds([]);
+    }
+  };
   return (
     <div>
       <Row className="mt-4">
@@ -33,6 +53,7 @@ const TaskLists = () => {
             <thead>
               <tr>
                 <th>S.N.</th>
+                <th>Delete</th>
                 <th>Tasks</th>
                 <th>Hours</th>
                 <th></th>
@@ -42,12 +63,16 @@ const TaskLists = () => {
               <tbody>
                 <tr key={i}>
                   <td>{i + 1}</td>
-                  <td>{item.task}</td>
+
+                  <td>
+                    <Form.Check value={item._id} onChange={handleOnSelect} />
+                  </td>
+                  <td> {item.task}</td>
                   <td>{item.hour}</td>
                   <td className="d-flex justify-content-evenly g-1">
-                    <Button variant="danger" type="submit">
+                    {/* <Button variant="danger" type="submit">
                       <i className="fa-solid fa-trash"></i>
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="info"
                       onClick={() =>
@@ -70,6 +95,7 @@ const TaskLists = () => {
             <thead>
               <tr>
                 <th>S.N.</th>
+                <th>Delete</th>
                 <th>Tasks</th>
                 <th>Hours</th>
                 <th></th>
@@ -79,7 +105,10 @@ const TaskLists = () => {
               <tbody>
                 <tr key={i}>
                   <td>{i + 1}</td>
-                  <td>{item.task}</td>
+                  <td>
+                    <Form.Check value={item._id} onChange={handleOnSelect} />
+                  </td>
+                  <td> {item.task}</td>
                   <td>{item.hour}</td>
                   <td className="d-flex justify-content-evenly g-1">
                     <Button
@@ -91,14 +120,56 @@ const TaskLists = () => {
                     >
                       <i className="fa-solid fa-arrow-left"></i>
                     </Button>
-                    <Button variant="danger" type="submit">
+                    {/* <Button variant="danger" type="submit">
                       <i className="fa-solid fa-trash"></i>
-                    </Button>
+                    </Button> */}
                   </td>
                 </tr>
               </tbody>
             ))}
           </Table>
+          <hr />
+          <Table className="table table-striped table-hover ">
+            <tbody>
+              <tr>
+                <td>Total hours you could have saved:</td>
+                <td>
+                  {badList.reduce((totalHour, item) => {
+                    return totalHour + item.hour;
+                  }, 0)}
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
+      <hr />
+      <Row>
+        <Table className="table table-striped table-hover w-full d-flex justify-content-center">
+          <tbody>
+            {' '}
+            <tr>
+              <td>Total hours allocated:</td>
+              <td>
+                {taskList.reduce((totalHour, item) => {
+                  return totalHour + item.hour;
+                }, 0)}
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+      </Row>
+
+      <Row>
+        <Col>
+          {' '}
+          {ids.length > 0 && (
+            <div className="d-grid">
+              <Button onClick={handleOnDelete} variant="danger">
+                Delete {ids.length} tasks
+              </Button>
+            </div>
+          )}
         </Col>
       </Row>
     </div>

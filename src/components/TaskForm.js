@@ -31,6 +31,7 @@ const TaskForm = () => {
               placeholder="Enter task"
               name="task"
               onChange={handleOnChange}
+              required
             />
           </Col>
           <Col md="3">
@@ -40,6 +41,7 @@ const TaskForm = () => {
               placeholder="Enter Hours"
               name="hour"
               onChange={handleOnChange}
+              required
             />
           </Col>
           <Col md="3" className=" d-grid">

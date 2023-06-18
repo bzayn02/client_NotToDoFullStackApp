@@ -37,3 +37,16 @@ export const switchTask = async (taskObj) => {
     console.log(error);
   }
 };
+
+// Deleting task
+export const deleteTasks = async (ids) => {
+  try {
+    // {data} destructured from response from server
+    // axios.delete(api, { data: ids }); Delete specific method to follow
+    const { data } = await axios.delete(api, { data: ids });
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
