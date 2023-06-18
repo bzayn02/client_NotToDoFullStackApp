@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { postTask } from '../helper/axiosHelper';
-import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { addTaskList } from '../redux/taskAction';
 
-const TaskForm = ({ getTaskLists }) => {
+const TaskForm = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
 
   const handleOnChange = (e) => {
@@ -13,28 +14,17 @@ const TaskForm = ({ getTaskLists }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleOnSubmit = async (e) => {
+  const handleOnSubmit = (e) => {
     e.preventDefault();
 
-    const responsePromise = postTask(formData);
-    toast.promise(responsePromise, {
-      pending: 'Please Wait...',
-    });
-    const { status, message } = await responsePromise;
-
-    console.log(status);
-    toast[status](message);
-
-    if (status === 'success') {
-      getTaskLists();
-    }
+    dispatch(addTaskList(formData));
     // console.log(formData);
   };
 
   return (
     <div>
       <Form onSubmit={handleOnSubmit}>
-        <Row className="g-2 p-3 bg-info-subtle rounded-4">
+        <Row className="p-4 bg-info-subtle rounded-4">
           <Col md="6">
             <Form.Control
               type="task"

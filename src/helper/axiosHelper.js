@@ -25,3 +25,15 @@ export const fetchTask = async () => {
     console.log(error);
   }
 };
+
+// Switching task
+export const switchTask = async (taskObj) => {
+  try {
+    // {data} destructured from response from server
+    const { data } = await axios.patch(api, taskObj);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
