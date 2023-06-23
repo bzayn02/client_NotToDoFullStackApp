@@ -23,6 +23,10 @@ export const fetchTask = async () => {
     return data;
   } catch (error) {
     console.log(error);
+    return {
+      status: 'error',
+      message: error.message,
+    };
   }
 };
 
